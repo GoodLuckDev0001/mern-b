@@ -52,12 +52,12 @@ npm start
 ## File Handling & Encryption
 - Uploaded documents and generated PDFs are zipped and then encrypted with AES-256.
 - Only the `.encrypted` file is retained; the unencrypted zip is deleted for security.
-- Encrypted files are stored in `src/uploads/`.
+- Encrypted files are stored in `src/templates/`.
 
 ### Decrypting Files
 To decrypt an encrypted file:
 ```sh
-npm run decrypt -- "src/uploads/yourfile.encrypted"
+npm run decrypt -- "src/templates/yourfile.encrypted"
 ```
 The decrypted file will appear in the same directory.
 

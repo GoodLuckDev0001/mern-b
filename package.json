@@ -20,6 +20,7 @@
     "@types/archiver": "^6.0.3",
     "@types/crypto-js": "^4.2.2",
     "@types/selfsigned": "^2.0.4",
+    "adm-zip": "^0.5.16",
     "archiver": "^6.0.2",
     "bcryptjs": "^2.4.3",
     "child_process": "^1.0.2",
