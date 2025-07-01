@@ -10,6 +10,8 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import { encryptionService } from './utils/encryption';
 import selfsigned from 'selfsigned';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
 
 dotenv.config();
 
@@ -62,8 +64,14 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Static file serving with encryption
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Load the OpenAPI YAML file
+const swaggerDocument = YAML.load(path.join(__dirname, './openapi.yaml'));
+
 // API routes
 app.use('/api', router);
+
+// Serve Swagger UI at /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Health check endpoint
 app.get('/health', (_req, res) => {

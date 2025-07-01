@@ -5,7 +5,6 @@ import { submitForm } from '../controller';
 
 const router = express.Router();
 
-// Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (_req: Express.Request, _file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
     cb(null, path.join(__dirname, '../uploads'));
@@ -17,7 +16,6 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (_req: Express.Request, file: Express.Multer.File, cb: (error: any, acceptFile: boolean) => void) => {
-  // Allow only PDF, JPG, PNG files
   const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
   
   if (allowedTypes.includes(file.mimetype)) {
@@ -31,12 +29,11 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
-    files: 20 // Maximum 20 files
+    fileSize: 10 * 1024 * 1024,
+    files: 20
   }
 });
 
-// Health check endpoint
 router.get('/health', (_req: express.Request, res: express.Response) => {
   res.status(200).json({ 
     status: 'OK', 
@@ -45,7 +42,6 @@ router.get('/health', (_req: express.Request, res: express.Response) => {
   });
 });
 
-// Submit form endpoint with file upload support
 router.post('/submit', upload.any(), submitForm);
 
 export default router;

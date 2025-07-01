@@ -57,7 +57,7 @@ npm start
 ### Decrypting Files
 To decrypt an encrypted file:
 ```sh
-npm run decrypt -- "src/templates/GeneratedForm_902.4e_2025-06-27T18-34-37-768Z.pdf.encrypted"
+npm run decrypt -- "src/templates/GeneratedForm_902.1e_2025-07-01T02-09-34-166Z.pdf.encrypted"
 ```
 The decrypted file will appear in the same directory.
 

@@ -1,0 +1,253 @@
+openapi: 3.0.0
+info:
+  title: Centi Onboarding API
+  version: 1.0.0
+  description: API for Centi Client Onboarding System
+
+servers:
+  - url: http://localhost:3443/api
+
+paths:
+  /submit:
+    post:
+      summary: Submit onboarding form and documents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardingSubmission'
+      responses:
+        '200':
+          description: Submission successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  referenceNumber:
+                    type: string
+        '500':
+          description: Submission failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+components:
+  schemas:
+    OnboardingSubmission:
+      type: object
+      properties:
+        formState:
+          $ref: '#/components/schemas/FormState'
+        template:
+          type: string
+      required:
+        - formState
+
+    FormState:
+      type: object
+      properties:
+        currentStep: { type: integer }
+        finishFlag: { type: boolean }
+        clientType: { type: string }
+        companyInfo: { $ref: '#/components/schemas/CompanyInfo' }
+        entityInfo: { $ref: '#/components/schemas/EntityInfo' }
+        soleProprietorInfo: { $ref: '#/components/schemas/SoleProprietorInfo' }
+        validationErrors: { type: object, additionalProperties: { type: string } }
+        establishingPersons:
+          type: array
+          items: { $ref: '#/components/schemas/EstablishingPerson' }
+        controllingInfo: { $ref: '#/components/schemas/ControllingInfo' }
+        beneficialInfo: { $ref: '#/components/schemas/BeneficialInfo' }
+        businessActivity: { $ref: '#/components/schemas/BusinessActivity' }
+        financialInfo: { $ref: '#/components/schemas/FinancialInfo' }
+        transactionInfo: { $ref: '#/components/schemas/TransactionInfo' }
+        sanctionsInfo: { $ref: '#/components/schemas/SanctionsInfo' }
+        termsInfo: { $ref: '#/components/schemas/TermsInfo' }
+        verificationInfo: { $ref: '#/components/schemas/VerificationInfo' }
+        additionalInfo: { $ref: '#/components/schemas/AdditionalInfo' }
+        riskProfile: { $ref: '#/components/schemas/RiskProfile' }
+
+    CompanyInfo:
+      type: object
+      properties:
+        name: { type: string }
+        address: { type: string }
+        postal: { type: string }
+        city: { type: string }
+        canton: { type: string }
+        phone: { type: string }
+        email: { type: string }
+        industry: { type: string }
+
+    EntityInfo:
+      type: object
+      properties:
+        uid: { type: string }
+        incorporationDate: { type: string }
+        purpose: { type: string }
+        registerFile: { type: string, format: binary, nullable: true }
+        articlesFile: { type: string, format: binary, nullable: true }
+        isListed: { type: string }
+        exchangeName: { type: string }
+
+    SoleProprietorInfo:
+      type: object
+      properties:
+        uid: { type: string }
+        establishmentDate: { type: string }
+        ownerName: { type: string }
+        ownerDob: { type: string }
+        ownerNationality: { type: string }
+        ownerAddress: { type: string }
+
+    EstablishingPerson:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        dob: { type: string }
+        postal: { type: string }
+        city: { type: string }
+        country: { type: string }
+        nationality: { type: string }
+        address: { type: string }
+        toa: { type: string }
+        iddoc: { type: string, format: binary, nullable: true }
+        poa: { type: string, format: binary, nullable: true }
+
+    ControllingPerson:
+      type: object
+      properties:
+        id: { type: string }
+        lastName: { type: string }
+        firstName: { type: string }
+        dob: { type: string }
+        nationality: { type: string }
+        address: { type: string }
+        postal: { type: string }
+        city: { type: string }
+        country: { type: string }
+
+    ManagingDirector:
+      type: object
+      properties:
+        id: { type: string }
+        lastName: { type: string }
+        firstName: { type: string }
+        dob: { type: string }
+        nationality: { type: string }
+        address: { type: string }
+
+    ControllingInfo:
+      type: object
+      properties:
+        is25Percent: { type: boolean }
+        controllingPersons:
+          type: array
+          items: { $ref: '#/components/schemas/ControllingPerson' }
+        inOtherWay: { type: boolean }
+        managingDirector: { $ref: '#/components/schemas/ManagingDirector' }
+
+    BeneficialOwner:
+      type: object
+      properties:
+        id: { type: string }
+        lastName: { type: string }
+        firstName: { type: string }
+        dob: { type: string }
+        nationality: { type: string }
+        address: { type: string }
+        relationship: { type: string }
+
+    BeneficialInfo:
+      type: object
+      properties:
+        isSoleOwner: { type: boolean }
+        beneficialOwners:
+          type: array
+          items: { $ref: '#/components/schemas/BeneficialOwner' }
+
+    BusinessActivity:
+      type: object
+      properties:
+        professionActivity: { type: string }
+        businessDescription: { type: string }
+        targetClients: { type: string }
+        mainCountries:
+          type: array
+          items: { type: string }
+
+    FinancialInfo:
+      type: object
+      properties:
+        annualRevenue: { type: string }
+        totalAssets: { type: string }
+        liabilities: { type: string }
+
+    TransactionInfo:
+      type: object
+      properties:
+        assetNature: { type: string }
+        assetOrigin: { type: string }
+        assetCategory: { type: string }
+        monthlyVolume: { type: number }
+        isOtherCategory: { type: boolean }
+        businessPurposes:
+          type: array
+          items: { type: string }
+
+    SanctionsInfo:
+      type: object
+      properties:
+        isPep: { type: boolean }
+        pepType: { type: string, enum: [domestic, foreign, international, ''] }
+        hasPepRelationship: { type: boolean }
+        sanctionedCountries:
+          type: array
+          items: { type: string }
+        pepName: { type: string }
+        pepPosition: { type: string }
+        pepCountry: { type: string }
+        pepPeriod: { type: string }
+        isSanctions: { type: boolean }
+        sanctionsName: { type: string }
+        sanctionsCountry: { type: string }
+        sanctionsNature: { type: string }
+
+    TermsInfo:
+      type: object
+      properties:
+        agreePrivacy: { type: boolean }
+        agreeTerms: { type: boolean }
+        confirmTruth: { type: boolean }
+
+    VerificationInfo:
+      type: object
+      properties:
+        verificationMethod: { type: string }
+        videoDate: { type: string }
+
+    AdditionalInfo:
+      type: object
+      properties:
+        financialStatements: { type: string, format: binary, nullable: true }
+        businessPlan: { type: string, format: binary, nullable: true }
+        licensesPermits: { type: string, format: binary, nullable: true }
+        supportingDocuments: { type: string, format: binary, nullable: true }
+
+    RiskProfile:
+      type: object
+      properties:
+        clientName: { type: string }
+        date: { type: string }
+        isForeignPEP: { type: boolean }
+        isDomesticPEP: { type: boolean }
+        isHighRisk: { type: boolean }
